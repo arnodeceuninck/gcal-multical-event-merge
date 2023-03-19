@@ -124,14 +124,11 @@ const resetMergedEvents = (events) => {
 const getEventContent = (event) => {
     let content = event.textContent; // e.g. Random title09:00 – 10:30Random location
 
-    let time = content.match(/\d{2}:\d{2} - \d{2}:\d{2}/);
-    if (!time) {
-      time = content.match(/\d{2}:\d{2}/);
-    }
+    let time = content.match(/\d{2}:\d{2}/); // e.g. 09:00
 
     content = content.split(time);
 
-    content = content[0] + time; // only use title and time as this part of the key (duration added later by height)
+    content = content[0] + time; // only use title and first time (duration added later by height)
     return content;
 }
 
@@ -145,8 +142,8 @@ const merge = (mainCalender) => {
       if (!eventTitleEls.length) {
         return;
       }
-      let eventKey = Array.from(eventTitleEls).map(el => getEventContent(el))[0]; // Note: Removed the join and remove whitespaces, for some reason didn't work with it (but it probably had a reason why it was there)
-      eventKey = index + eventKey + event.style.height;
+      let eventKey = Array.from(eventTitleEls).map(el => getEventContent(el))[0].replace(/\s/g, ''); // Note: Removed the join, for some reason didn't work with it (but it probably had a reason why it was there)
+      eventKey = index + "_" + eventKey + "_" + event.style.height;
       eventSets[eventKey] = eventSets[eventKey] || [];
       eventSets[eventKey].push(event);
     });
