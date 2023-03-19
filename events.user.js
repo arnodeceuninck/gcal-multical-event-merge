@@ -44,7 +44,9 @@ const calculatePosition = (event, parentPosition) => {
 }
 
 const mergeEventElements = (events) => {
-  events.sort((e1, e2) => dragType(e1) - dragType(e2));
+  // events.sort((e1, e2) => dragType(e1) - dragType(e2));
+  // sort on textContent length (since longer usually contains more info, e.g. location)
+  events.sort((e1, e2) => e2.textContent.length - e1.textContent.length);
   const colors = events.map(event =>
     event.style.backgroundColor || // Week day and full day events marked 'attending'
     event.style.borderColor || // Not attending or not responded week view events
